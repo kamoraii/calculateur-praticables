@@ -1,257 +1,64 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Calculateur praticables</title>
 
 <link rel="apple-touch-icon" href="icone.jpg">
-<meta name="apple-mobile-web-app-capable" content="yes">
 
 <style>
 body{
-font-family:-apple-system,BlinkMacSystemFont,Arial;
+font-family:Arial;
 margin:0;
-padding:14px;
-background:linear-gradient(180deg,#6a5acd,#c056d5);
-}
-
-.container{max-width:420px;margin:auto;}
-
-.card{
-background:white;
-padding:14px;
-border-radius:14px;
-margin-bottom:12px;
-box-shadow:0 6px 14px rgba(0,0,0,0.15);
-}
-
-h1{color:white;text-align:center;}
-
-input,select{
-padding:6px;
-border-radius:8px;
-border:2px solid #7b5cff;
-margin:3px;
-}
-
-button{
-width:100%;
 padding:10px;
-border:none;
-border-radius:10px;
-margin-top:8px;
+background:#6a5acd;
 color:white;
 }
 
-.add{background:#7b5cff;}
-.reset{background:#d84343;}
-
-.module{
-border:2px solid #ddd;
+.card{
+background:white;
+color:black;
 padding:10px;
 border-radius:10px;
 margin-bottom:10px;
 }
 
-.plan{display:grid;gap:2px;margin-top:10px;}
-.cell{
-background:#eee;
-height:22px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:12px;
+button{
+padding:10px;
+margin-top:5px;
+width:100%;
 }
-.cell.r{background:#7b5cff;color:white;}
-
-.total{background:#f1edff;padding:10px;border-radius:10px;margin-top:10px;}
-.small{font-size:13px;color:#666;}
 </style>
 
 </head>
 
 <body>
 
-<div class="container">
-
 <h1>Praticables</h1>
 
 <div class="card">
-
-Titre<br>
-<input id="titre"><br>
-
-Artiste<br>
-<input id="artiste"><br>
-
-Date<br>
-<input id="date" type="date"><br>
-
+<button onclick="addModule()">Ajouter module</button>
 </div>
 
-<div class="card">
-<div id="modules"></div>
-<button class="add" onclick="addModule()">+ Ajouter module</button>
-<button class="reset" onclick="resetAll()">Reset</button>
-</div>
-
-<div class="card">
-<h3>Résultats</h3>
-<div id="results"></div>
-</div>
-
-<div class="card">
-<h3>Plan</h3>
-<div id="plan"></div>
-</div>
-
-</div>
+<div class="card" id="modules"></div>
 
 <script>
 
-let modules=[]
-
-function save(){
-localStorage.setItem("modules",JSON.stringify(modules))
-localStorage.setItem("titre",document.getElementById("titre").value)
-localStorage.setItem("artiste",document.getElementById("artiste").value)
-localStorage.setItem("date",document.getElementById("date").value)
-}
-
-function load(){
-
-let data=localStorage.getItem("modules")
-if(data) modules=JSON.parse(data)
-
-document.getElementById("titre").value=localStorage.getItem("titre")||""
-document.getElementById("artiste").value=localStorage.getItem("artiste")||""
-document.getElementById("date").value=localStorage.getItem("date")||""
-
-render()
-}
+let modules=[];
 
 function addModule(){
-modules.push({L:4,P:2,H:40,R:false})
-render();save()
-}
-
-function update(i,key,val){
-modules[i][key]=(key==="R")?val:(parseFloat(val)||0)
-render();save()
-}
-
-function removeModule(i){
-modules.splice(i,1)
-render();save()
+modules.push("ok");
+render();
 }
 
 function render(){
-
-let html=""
-let totalP=0,totalR=0,totalS=0
-
-modules.forEach((m,i)=>{
-
-let L=Math.ceil(m.L/2)
-let P=Math.ceil(m.P)
-let praticables=L*P
-let risers=m.R?praticables:0
-
-let contacts=(L-1)*P + L*(P-1)
-let sucres=contacts*2
-
-totalP+=praticables
-totalR+=risers
-totalS+=sucres
-
-html+=`
-<div class="module">
-
-<b>${m.L}×${m.P} à ${m.H} cm ${m.R?"(R)":""}</b><br>
-
-Praticables : ${praticables}<br>
-Risers : ${risers}<br>
-<span class="small">Sucres : ${sucres}</span><br>
-
-Largeur <input type="number" value="${m.L}" onchange="update(${i},'L',this.value)">
-Profondeur <input type="number" value="${m.P}" onchange="update(${i},'P',this.value)">
-Hauteur <input type="number" value="${m.H}" onchange="update(${i},'H',this.value)">
-
-<select onchange="update(${i},'R',this.value==='true')">
-<option value="false" ${!m.R?"selected":""}>Sans Riser</option>
-<option value="true" ${m.R?"selected":""}>Sur Riser</option>
-</select>
-
-<button onclick="removeModule(${i})">Supprimer</button>
-
-</div>`
-})
-
-html+=`
-<div class="total">
-
-<b>${document.getElementById("titre").value}</b><br>
-${document.getElementById("artiste").value}<br>
-${document.getElementById("date").value}<br><br>
-
-Praticables : ${totalP}<br>
-Risers : ${totalR}<br>
-<span class="small">Sucres : ${totalS}</span>
-
-</div>`
-
-document.getElementById("results").innerHTML=html
-
-drawPlan()
+document.getElementById("modules").innerHTML =
+"Modules : " + modules.length;
 }
 
-function drawPlan(){
-
-let plan=document.getElementById("plan")
-plan.innerHTML=""
-
-modules.forEach(m=>{
-
-let L=Math.ceil(m.L/2)
-let P=Math.ceil(m.P)
-
-let grid=document.createElement("div")
-grid.className="plan"
-grid.style.gridTemplateColumns=`repeat(${L},1fr)`
-
-for(let y=0;y<P;y++){
-for(let x=0;x<L;x++){
-
-let cell=document.createElement("div")
-cell.className="cell"
-
-if(m.R){
-cell.classList.add("r")
-cell.innerText="R"
-}
-
-grid.appendChild(cell)
-
-}
-}
-
-plan.appendChild(grid)
-})
-}
-
-function resetAll(){
-modules=[]
-localStorage.clear()
-render()
-}
-
-document.addEventListener("input",save)
-
-// 🔥 FIX IMPORTANT
-document.addEventListener("DOMContentLoaded", load)
+document.addEventListener("DOMContentLoaded", render);
 
 </script>
 
