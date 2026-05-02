@@ -1,40 +1,42 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculateur praticables</title>
+<title>Praticables</title>
 
 <link rel="apple-touch-icon" href="icone.jpg">
-<meta name="apple-mobile-web-app-capable" content="yes">
 
 <style>
 body{
-font-family:-apple-system,BlinkMacSystemFont,Arial;
+font-family:-apple-system,Arial;
 margin:0;
-padding:14px;
+padding:12px;
 background:linear-gradient(180deg,#6a5acd,#c056d5);
 }
 
-.container{max-width:420px;margin:auto;}
+.header{
+text-align:center;
+color:white;
+margin-bottom:10px;
+}
+
+.header h1{margin:0;font-size:28px;}
+.header p{margin:0;font-size:16px;}
 
 .card{
 background:white;
-padding:14px;
-border-radius:14px;
-margin-bottom:12px;
-box-shadow:0 6px 14px rgba(0,0,0,0.15);
+padding:12px;
+border-radius:12px;
+margin-bottom:10px;
 }
-
-h1{color:white;text-align:center;}
 
 input,select{
 padding:6px;
 border-radius:8px;
 border:2px solid #7b5cff;
-margin:3px;
+margin:4px;
 }
 
 button{
@@ -56,40 +58,42 @@ border-radius:10px;
 margin-bottom:10px;
 }
 
-.plan{display:grid;gap:2px;margin-top:10px;}
+.small{color:#666;font-size:13px;}
+
+.plan{
+display:grid;
+gap:2px;
+margin-top:8px;
+}
+
 .cell{
-background:#eee;
+width:22px;
 height:22px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:12px;
+background:#eee;
+font-size:11px;
 }
-.cell.r{background:#7b5cff;color:white;}
 
-.total{background:#f1edff;padding:10px;border-radius:10px;margin-top:10px;}
-.small{font-size:13px;color:#666;}
+.cell.r{
+background:#7b5cff;
+color:white;
+}
 </style>
 
 </head>
 
 <body>
 
-<div class="container">
-
-<h1>Praticables</h1>
+<div class="header">
+<h1 id="headerArtist">—</h1>
+<p id="headerDate">—</p>
+</div>
 
 <div class="card">
-
-Titre<br>
-<input id="titre"><br>
-
-Artiste<br>
-<input id="artiste"><br>
-
-Date<br>
-<input id="date" type="date"><br>
-
+Artiste <input id="artiste">
+Date <input id="date" type="date">
 </div>
 
 <div class="card">
@@ -99,15 +103,13 @@ Date<br>
 </div>
 
 <div class="card">
-<h3>Résultats</h3>
-<div id="results"></div>
+<h3>Total</h3>
+<div id="total"></div>
 </div>
 
 <div class="card">
 <h3>Plan</h3>
 <div id="plan"></div>
-</div>
-
 </div>
 
 <script>
@@ -116,20 +118,14 @@ let modules=[]
 
 function save(){
 localStorage.setItem("modules",JSON.stringify(modules))
-localStorage.setItem("titre",document.getElementById("titre").value)
-localStorage.setItem("artiste",document.getElementById("artiste").value)
-localStorage.setItem("date",document.getElementById("date").value)
+localStorage.setItem("artiste",artiste.value)
+localStorage.setItem("date",date.value)
 }
 
 function load(){
-
-let data=localStorage.getItem("modules")
-if(data) modules=JSON.parse(data)
-
-document.getElementById("titre").value=localStorage.getItem("titre")||""
-document.getElementById("artiste").value=localStorage.getItem("artiste")||""
-document.getElementById("date").value=localStorage.getItem("date")||""
-
+modules=JSON.parse(localStorage.getItem("modules")||"[]")
+artiste.value=localStorage.getItem("artiste")||""
+date.value=localStorage.getItem("date")||""
 render()
 }
 
@@ -148,37 +144,49 @@ modules.splice(i,1)
 render();save()
 }
 
-function render(){
-
-let html=""
-let totalP=0,totalR=0,totalS=0
-
-modules.forEach((m,i)=>{
+function calc(m){
 
 let L=Math.ceil(m.L/2)
 let P=Math.ceil(m.P)
+
 let praticables=L*P
 let risers=m.R?praticables:0
 
 let contacts=(L-1)*P + L*(P-1)
 let sucres=contacts*2
 
-totalP+=praticables
-totalR+=risers
-totalS+=sucres
+return {L,P,praticables,risers,sucres}
+}
+
+function render(){
+
+// HEADER
+headerArtist.innerText=artiste.value||"—"
+headerDate.innerText=date.value||"—"
+
+let html=""
+let totalP=0,totalR=0,totalS=0
+
+modules.forEach((m,i)=>{
+
+let c=calc(m)
+
+totalP+=c.praticables
+totalR+=c.risers
+totalS+=c.sucres
 
 html+=`
 <div class="module">
 
 <b>${m.L}×${m.P} à ${m.H} cm ${m.R?"(R)":""}</b><br>
 
-Praticables : ${praticables}<br>
-Risers : ${risers}<br>
-<span class="small">Sucres : ${sucres}</span><br>
+Praticables : ${c.praticables}<br>
+Risers : ${c.risers}<br>
+<span class="small">Sucres : ${c.sucres}</span><br><br>
 
-Largeur <input type="number" value="${m.L}" onchange="update(${i},'L',this.value)">
-Profondeur <input type="number" value="${m.P}" onchange="update(${i},'P',this.value)">
-Hauteur <input type="number" value="${m.H}" onchange="update(${i},'H',this.value)">
+L <input type="number" value="${m.L}" onchange="update(${i},'L',this.value)">
+P <input type="number" value="${m.P}" onchange="update(${i},'P',this.value)">
+H <input type="number" value="${m.H}" onchange="update(${i},'H',this.value)">
 
 <select onchange="update(${i},'R',this.value==='true')">
 <option value="false" ${!m.R?"selected":""}>Sans Riser</option>
@@ -190,40 +198,31 @@ Hauteur <input type="number" value="${m.H}" onchange="update(${i},'H',this.value
 </div>`
 })
 
-html+=`
-<div class="total">
+modulesDiv.innerHTML=html
 
-<b>${document.getElementById("titre").value}</b><br>
-${document.getElementById("artiste").value}<br>
-${document.getElementById("date").value}<br><br>
-
+total.innerHTML=`
 Praticables : ${totalP}<br>
 Risers : ${totalR}<br>
 <span class="small">Sucres : ${totalS}</span>
-
-</div>`
-
-document.getElementById("results").innerHTML=html
+`
 
 drawPlan()
 }
 
 function drawPlan(){
 
-let plan=document.getElementById("plan")
 plan.innerHTML=""
 
 modules.forEach(m=>{
 
-let L=Math.ceil(m.L/2)
-let P=Math.ceil(m.P)
+let c=calc(m)
 
 let grid=document.createElement("div")
 grid.className="plan"
-grid.style.gridTemplateColumns=`repeat(${L},1fr)`
+grid.style.gridTemplateColumns=`repeat(${c.L},22px)`
 
-for(let y=0;y<P;y++){
-for(let x=0;x<L;x++){
+for(let y=0;y<c.P;y++){
+for(let x=0;x<c.L;x++){
 
 let cell=document.createElement("div")
 cell.className="cell"
@@ -234,7 +233,6 @@ cell.innerText="R"
 }
 
 grid.appendChild(cell)
-
 }
 }
 
@@ -249,9 +247,7 @@ render()
 }
 
 document.addEventListener("input",save)
-
-// 🔥 FIX IMPORTANT
-document.addEventListener("DOMContentLoaded", load)
+document.addEventListener("DOMContentLoaded",load)
 
 </script>
 
