@@ -114,68 +114,90 @@ Date <input id="date" type="date">
 
 <script>
 
-let modules=[]
+let modules = []
+
+let modulesDiv
+let planDiv
+let totalDiv
+let artisteInput
+let dateInput
+let headerArtist
+let headerDate
+
+function formatDateFR(dateStr){
+if(!dateStr) return "—"
+let d = new Date(dateStr)
+return d.toLocaleDateString("fr-FR", {
+day: "numeric",
+month: "long",
+year: "numeric"
+})
+}
 
 function save(){
-localStorage.setItem("modules",JSON.stringify(modules))
-localStorage.setItem("artiste",artiste.value)
-localStorage.setItem("date",date.value)
+localStorage.setItem("modules", JSON.stringify(modules))
+localStorage.setItem("artiste", artisteInput.value)
+localStorage.setItem("date", dateInput.value)
 }
 
 function load(){
-modules=JSON.parse(localStorage.getItem("modules")||"[]")
-artiste.value=localStorage.getItem("artiste")||""
-date.value=localStorage.getItem("date")||""
+modules = JSON.parse(localStorage.getItem("modules") || "[]")
+artisteInput.value = localStorage.getItem("artiste") || ""
+dateInput.value = localStorage.getItem("date") || ""
 render()
 }
 
 function addModule(){
-modules.push({L:4,P:2,H:40,R:false})
-render();save()
+modules.push({L:4, P:2, H:40, R:false})
+render()
+save()
 }
 
 function update(i,key,val){
-modules[i][key]=(key==="R")?val:(parseFloat(val)||0)
-render();save()
+modules[i][key] = (key==="R") ? val : (parseFloat(val)||0)
+render()
+save()
 }
 
 function removeModule(i){
 modules.splice(i,1)
-render();save()
+render()
+save()
 }
 
 function calc(m){
 
-let L=Math.ceil(m.L/2)
-let P=Math.ceil(m.P)
+let L = Math.ceil(m.L / 2)
+let P = Math.ceil(m.P / 1)
 
-let praticables=L*P
-let risers=m.R?praticables:0
+let praticables = L * P
+let risers = m.R ? praticables : 0
 
-let contacts=(L-1)*P + L*(P-1)
-let sucres=contacts*2
+let contacts = (L-1)*P + L*(P-1)
+let sucres = contacts * 2
 
 return {L,P,praticables,risers,sucres}
 }
 
 function render(){
 
-// HEADER
-headerArtist.innerText=artiste.value||"—"
-headerDate.innerText=date.value||"—"
+headerArtist.innerText = artisteInput.value || "—"
+headerDate.innerText = formatDateFR(dateInput.value)
 
-let html=""
-let totalP=0,totalR=0,totalS=0
+let html = ""
+let totalP = 0
+let totalR = 0
+let totalS = 0
 
 modules.forEach((m,i)=>{
 
-let c=calc(m)
+let c = calc(m)
 
-totalP+=c.praticables
-totalR+=c.risers
-totalS+=c.sucres
+totalP += c.praticables
+totalR += c.risers
+totalS += c.sucres
 
-html+=`
+html += `
 <div class="module">
 
 <b>${m.L}×${m.P} à ${m.H} cm ${m.R?"(R)":""}</b><br>
@@ -198,9 +220,9 @@ H <input type="number" value="${m.H}" onchange="update(${i},'H',this.value)">
 </div>`
 })
 
-modulesDiv.innerHTML=html
+modulesDiv.innerHTML = html
 
-total.innerHTML=`
+totalDiv.innerHTML = `
 Praticables : ${totalP}<br>
 Risers : ${totalR}<br>
 <span class="small">Sucres : ${totalS}</span>
@@ -211,43 +233,56 @@ drawPlan()
 
 function drawPlan(){
 
-plan.innerHTML=""
+planDiv.innerHTML = ""
 
 modules.forEach(m=>{
 
-let c=calc(m)
+let c = calc(m)
 
-let grid=document.createElement("div")
-grid.className="plan"
-grid.style.gridTemplateColumns=`repeat(${c.L},22px)`
+let grid = document.createElement("div")
+grid.className = "plan"
+grid.style.gridTemplateColumns = `repeat(${c.L},22px)`
 
 for(let y=0;y<c.P;y++){
 for(let x=0;x<c.L;x++){
 
-let cell=document.createElement("div")
-cell.className="cell"
+let cell = document.createElement("div")
+cell.className = "cell"
 
 if(m.R){
 cell.classList.add("r")
-cell.innerText="R"
+cell.innerText = "R"
 }
 
 grid.appendChild(cell)
 }
 }
 
-plan.appendChild(grid)
+planDiv.appendChild(grid)
 })
 }
 
 function resetAll(){
-modules=[]
+modules = []
 localStorage.clear()
 render()
 }
 
-document.addEventListener("input",save)
-document.addEventListener("DOMContentLoaded",load)
+document.addEventListener("input", save)
+
+document.addEventListener("DOMContentLoaded", () => {
+
+modulesDiv = document.getElementById("modules")
+planDiv = document.getElementById("plan")
+totalDiv = document.getElementById("total")
+artisteInput = document.getElementById("artiste")
+dateInput = document.getElementById("date")
+headerArtist = document.getElementById("headerArtist")
+headerDate = document.getElementById("headerDate")
+
+load()
+
+})
 
 </script>
 
