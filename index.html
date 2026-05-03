@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Praticables</title>
-
 <link rel="apple-touch-icon" href="icone.jpg">
 
 <style>
@@ -61,19 +60,25 @@ margin-bottom:10px;
 .small{color:#666;font-size:13px;}
 
 .plan{
+margin-top:10px;
+}
+
+.modulePlan{
+margin-bottom:10px;
+}
+
+.grid{
 display:grid;
 gap:2px;
-margin-top:8px;
 }
 
 .cell{
-width:22px;
-height:22px;
+height:20px;
 display:flex;
 align-items:center;
 justify-content:center;
+font-size:10px;
 background:#eee;
-font-size:11px;
 }
 
 .cell.r{
@@ -81,7 +86,6 @@ background:#7b5cff;
 color:white;
 }
 </style>
-
 </head>
 
 <body>
@@ -116,45 +120,36 @@ Date <input id="date" type="date">
 
 let modules = []
 
-let modulesDiv
-let planDiv
-let totalDiv
-let artisteInput
-let dateInput
-let headerArtist
-let headerDate
+let modulesDiv, planDiv, totalDiv
+let artisteInput, dateInput, headerArtist, headerDate
 
 function formatDateFR(dateStr){
 if(!dateStr) return "—"
 let d = new Date(dateStr)
-return d.toLocaleDateString("fr-FR", {
-day: "numeric",
-month: "long",
-year: "numeric"
-})
+return d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})
 }
 
 function save(){
-localStorage.setItem("modules", JSON.stringify(modules))
-localStorage.setItem("artiste", artisteInput.value)
-localStorage.setItem("date", dateInput.value)
+localStorage.setItem("modules",JSON.stringify(modules))
+localStorage.setItem("artiste",artisteInput.value)
+localStorage.setItem("date",dateInput.value)
 }
 
 function load(){
-modules = JSON.parse(localStorage.getItem("modules") || "[]")
-artisteInput.value = localStorage.getItem("artiste") || ""
-dateInput.value = localStorage.getItem("date") || ""
+modules = JSON.parse(localStorage.getItem("modules")||"[]")
+artisteInput.value = localStorage.getItem("artiste")||""
+dateInput.value = localStorage.getItem("date")||""
 render()
 }
 
 function addModule(){
-modules.push({L:4, P:2, H:40, R:false})
+modules.push({L:4,P:2,H:40,R:false})
 render()
 save()
 }
 
 function update(i,key,val){
-modules[i][key] = (key==="R") ? val : (parseFloat(val)||0)
+modules[i][key] = (key==="R")?val:(parseFloat(val)||0)
 render()
 save()
 }
@@ -167,16 +162,16 @@ save()
 
 function calc(m){
 
-let L = Math.ceil(m.L / 2)
-let P = Math.ceil(m.P / 1)
+let cols = Math.ceil(m.L / 2) // 2m côté
+let rows = Math.ceil(m.P / 1) // 1m côté
 
-let praticables = L * P
+let praticables = cols * rows
 let risers = m.R ? praticables : 0
 
-let contacts = (L-1)*P + L*(P-1)
+let contacts = (cols-1)*rows + cols*(rows-1)
 let sucres = contacts * 2
 
-return {L,P,praticables,risers,sucres}
+return {cols,rows,praticables,risers,sucres}
 }
 
 function render(){
@@ -184,20 +179,18 @@ function render(){
 headerArtist.innerText = artisteInput.value || "—"
 headerDate.innerText = formatDateFR(dateInput.value)
 
-let html = ""
-let totalP = 0
-let totalR = 0
-let totalS = 0
+let html=""
+let totalP=0,totalR=0,totalS=0
 
 modules.forEach((m,i)=>{
 
-let c = calc(m)
+let c=calc(m)
 
-totalP += c.praticables
-totalR += c.risers
-totalS += c.sucres
+totalP+=c.praticables
+totalR+=c.risers
+totalS+=c.sucres
 
-html += `
+html+=`
 <div class="module">
 
 <b>${m.L}×${m.P} à ${m.H} cm ${m.R?"(R)":""}</b><br>
@@ -233,52 +226,61 @@ drawPlan()
 
 function drawPlan(){
 
-planDiv.innerHTML = ""
+planDiv.innerHTML=""
 
 modules.forEach(m=>{
 
-let c = calc(m)
+let c=calc(m)
 
-let grid = document.createElement("div")
-grid.className = "plan"
-grid.style.gridTemplateColumns = `repeat(${c.L},22px)`
+let wrapper=document.createElement("div")
+wrapper.className="modulePlan"
 
-for(let y=0;y<c.P;y++){
-for(let x=0;x<c.L;x++){
+let grid=document.createElement("div")
+grid.className="grid"
 
-let cell = document.createElement("div")
-cell.className = "cell"
+// IMPORTANT : respect 2m horizontal / 1m vertical
+grid.style.gridTemplateColumns=`repeat(${c.cols},40px)`
+
+for(let y=0;y<c.rows;y++){
+for(let x=0;x<c.cols;x++){
+
+let cell=document.createElement("div")
+cell.className="cell"
+cell.style.width="40px"  // 2m
+cell.style.height="20px" // 1m
 
 if(m.R){
 cell.classList.add("r")
-cell.innerText = "R"
+cell.innerText="R"
 }
 
 grid.appendChild(cell)
 }
 }
 
-planDiv.appendChild(grid)
+wrapper.appendChild(grid)
+planDiv.appendChild(wrapper)
+
 })
 }
 
 function resetAll(){
-modules = []
+modules=[]
 localStorage.clear()
 render()
 }
 
-document.addEventListener("input", save)
+document.addEventListener("input",save)
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded",()=>{
 
-modulesDiv = document.getElementById("modules")
-planDiv = document.getElementById("plan")
-totalDiv = document.getElementById("total")
-artisteInput = document.getElementById("artiste")
-dateInput = document.getElementById("date")
-headerArtist = document.getElementById("headerArtist")
-headerDate = document.getElementById("headerDate")
+modulesDiv=document.getElementById("modules")
+planDiv=document.getElementById("plan")
+totalDiv=document.getElementById("total")
+artisteInput=document.getElementById("artiste")
+dateInput=document.getElementById("date")
+headerArtist=document.getElementById("headerArtist")
+headerDate=document.getElementById("headerDate")
 
 load()
 
