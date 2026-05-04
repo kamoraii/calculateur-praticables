@@ -5,34 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Praticables</title>
-<link rel="apple-touch-icon" href="icone.jpg">
 
 <style>
-
-:root{
---bg:#f5f5f5;
---card:#ffffff;
---text:#000;
---accent:#6a5acd;
---riser:#6a5acd;
---cell:#ddd;
-}
-
-.dark{
---bg:#121212;
---card:#1e1e1e;
---text:#fff;
---accent:#bb86fc;
---riser:#bb86fc;
---cell:#333;
-}
-
 body{
 font-family:-apple-system,Arial;
 margin:0;
 padding:12px;
-background:var(--bg);
-color:var(--text);
+background:#f5f5f5;
 }
 
 .header{
@@ -41,7 +20,7 @@ margin-bottom:10px;
 }
 
 .card{
-background:var(--card);
+background:white;
 padding:12px;
 border-radius:12px;
 margin-bottom:10px;
@@ -53,19 +32,17 @@ padding:8px;
 margin-top:6px;
 margin-bottom:10px;
 border-radius:8px;
-border:2px solid var(--accent);
-background:var(--card);
-color:var(--text);
+border:1px solid #ccc;
 }
 
 button{
 width:100%;
-padding:12px;
+padding:10px;
 border:none;
 border-radius:10px;
-margin-top:8px;
+margin-top:6px;
+background:#6a5acd;
 color:white;
-background:var(--accent);
 }
 
 .reset{
@@ -73,36 +50,37 @@ background:#d84343;
 }
 
 .module{
-border:2px solid #ccc;
+border:2px solid #ddd;
 padding:10px;
 border-radius:10px;
-margin-bottom:10px;
+margin-bottom:12px;
 }
 
 .grid{
 display:grid;
-gap:3px;
+gap:2px;
 margin-top:6px;
 }
 
 .cell{
+width:30px;
+height:18px;
 display:flex;
 align-items:center;
 justify-content:center;
 font-size:10px;
-background:var(--cell);
-height:20px;
+background:#ddd;
 }
 
 .riser{
-background:var(--riser);
+background:#6a5acd;
 color:white;
 }
 
-.legend{
-font-size:12px;
-margin-top:8px;
-opacity:0.8;
+.globalPlan{
+display:flex;
+flex-wrap:wrap;
+gap:20px;
 }
 
 .commande{
@@ -112,46 +90,28 @@ font-weight:bold;
 
 .sucres{
 font-size:12px;
-opacity:0.6;
+opacity:0.5;
 }
-
-.toggle{
-margin-bottom:10px;
-}
-
 </style>
 </head>
 
 <body>
 
 <div class="header">
-<h2 id="headerArtist">—</h2>
-<p id="headerDate">—</p>
+<h2 id="title">—</h2>
 </div>
 
 <div class="card">
-
-<button onclick="toggleMode()" class="toggle">🌙 / ☀️ Mode</button>
-
-Artiste
-<input id="artiste">
-
-Date
+<input id="artiste" placeholder="Artiste">
 <input id="date" type="date">
-
-Mode calcul
-<select id="mode">
-<option value="auto">AUTO (optimisé)</option>
-<option value="manuel">MANUEL</option>
-</select>
-
 </div>
 
 <div class="card">
-<div id="modules"></div>
 <button onclick="addModule()">+ Ajouter module</button>
 <button class="reset" onclick="resetAll()">Reset</button>
 </div>
+
+<div id="modules"></div>
 
 <div class="card">
 <h3>COMMANDE</h3>
@@ -159,101 +119,67 @@ Mode calcul
 </div>
 
 <div class="card">
-<h3>Plan</h3>
-<div id="plan"></div>
-
-<div class="legend">
-Couleur = Riser<br>
-Nombre = hauteur (cm)
-</div>
+<h3>Plan global</h3>
+<div id="plan" class="globalPlan"></div>
 </div>
 
 <script>
 
 let modules=[]
 
-let modulesDiv,planDiv,totalDiv
-let artisteInput,dateInput,headerArtist,headerDate,modeSelect
-
-function formatDateFR(dateStr){
-if(!dateStr) return "—"
-let d=new Date(dateStr)
-return d.toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"})
-}
-
-function toggleMode(){
-document.body.classList.toggle("dark")
-}
-
 function save(){
 localStorage.setItem("modules",JSON.stringify(modules))
-localStorage.setItem("artiste",artisteInput.value)
-localStorage.setItem("date",dateInput.value)
-localStorage.setItem("mode",modeSelect.value)
+localStorage.setItem("artiste",artiste.value)
+localStorage.setItem("date",date.value)
 }
 
 function load(){
 modules=JSON.parse(localStorage.getItem("modules")||"[]")
-artisteInput.value=localStorage.getItem("artiste")||""
-dateInput.value=localStorage.getItem("date")||""
-modeSelect.value=localStorage.getItem("mode")||"auto"
+artiste.value=localStorage.getItem("artiste")||""
+date.value=localStorage.getItem("date")||""
 render()
+}
+
+function calc(m){
+let L=Math.ceil((m.L||0)/2)
+let P=Math.ceil((m.P||0))
+let praticables=L*P
+let risers=m.R?praticables:0
+let sucres=((L-1)*P + L*(P-1))*2
+return {L,P,praticables,risers,sucres}
 }
 
 function addModule(){
-modules.push({L:"",P:"",H:"",R:false})
+modules.push({
+L:"",
+P:"",
+H:"",
+R:false,
+validated:false
+})
 render()
+}
+
+function validateModule(i){
+modules[i].validated=true
 save()
+render()
 }
 
 function update(i,key,val){
-modules[i][key]=(key==="R")?val:(val)
+modules[i][key]=(key==="R")?val:val
 render()
-save()
 }
 
 function removeModule(i){
 modules.splice(i,1)
-render()
 save()
-}
-
-function calc(m){
-
-let A=parseFloat(m.L)||0
-let B=parseFloat(m.P)||0
-
-let colsA=Math.ceil(A/2)
-let rowsA=Math.ceil(B)
-let totalA=colsA*rowsA
-
-let colsB=Math.ceil(A)
-let rowsB=Math.ceil(B/2)
-let totalB=colsB*rowsB
-
-let cols,rows,praticables
-
-if(modeSelect.value==="auto"){
-if(totalA<=totalB){
-cols=colsA; rows=rowsA; praticables=totalA
-}else{
-cols=colsB; rows=rowsB; praticables=totalB
-}
-}else{
-cols=colsA; rows=rowsA; praticables=totalA
-}
-
-let risers=m.R?praticables:0
-let contacts=(cols-1)*rows + cols*(rows-1)
-let sucres=contacts*2
-
-return {cols,rows,praticables,risers,sucres}
+render()
 }
 
 function render(){
 
-headerArtist.innerText=artisteInput.value||"—"
-headerDate.innerText=formatDateFR(dateInput.value)
+title.innerText = artiste.value || "—"
 
 let html=""
 let totalP=0,totalR=0,totalS=0
@@ -262,41 +188,55 @@ modules.forEach((m,i)=>{
 
 let c=calc(m)
 
+if(m.validated){
 totalP+=c.praticables
 totalR+=c.risers
 totalS+=c.sucres
+}
 
 html+=`
 <div class="module">
 
-<b>${m.L||0}×${m.P||0} à ${m.H||0} cm ${m.R?"(R)":""}</b>
+${!m.validated ? `
+
+<b>Nouveau module</b>
+
+<input placeholder="Dimension A (m)" value="${m.L}" onchange="update(${i},'L',this.value)">
+<input placeholder="Dimension B (m)" value="${m.P}" onchange="update(${i},'P',this.value)">
+<input placeholder="Hauteur (cm)" value="${m.H}" onchange="update(${i},'H',this.value)">
+
+<select onchange="update(${i},'R',this.value==='true')">
+<option value="false">Sans Riser</option>
+<option value="true">Sur Riser</option>
+</select>
+
+<button onclick="validateModule(${i})">VALIDER MODULE</button>
+
+` : `
+
+<b>${m.L} × ${m.P} à ${m.H} cm</b>
 
 Praticables : ${c.praticables}<br>
 Risers : ${c.risers}<br>
 <span class="sucres">Sucres : ${c.sucres}</span>
 
-Dimension A (m)
-<input type="number" value="${m.L}" onchange="update(${i},'L',this.value)">
-
-Dimension B (m)
-<input type="number" value="${m.P}" onchange="update(${i},'P',this.value)">
-
-Hauteur (cm)
-<input type="number" value="${m.H}" onchange="update(${i},'H',this.value)">
-
-<select onchange="update(${i},'R',this.value==='true')">
-<option value="false" ${!m.R?"selected":""}>Sans Riser</option>
-<option value="true" ${m.R?"selected":""}>Sur Riser</option>
-</select>
+<div class="grid" style="grid-template-columns:repeat(${c.L},30px)">
+${Array(c.L*c.P).fill(0).map(()=>`
+<div class="cell ${m.R?"riser":""}">${m.H}</div>
+`).join("")}
+</div>
 
 <button onclick="removeModule(${i})">Supprimer</button>
 
-</div>`
+`}
+
+</div>
+`
 })
 
 modulesDiv.innerHTML=html
 
-totalDiv.innerHTML=`
+total.innerHTML=`
 <div class="commande">
 Praticables : ${totalP}<br>
 Risers : ${totalR}
@@ -306,38 +246,36 @@ Sucres : ${totalS}
 </div>
 `
 
-drawPlan()
+drawGlobalPlan()
 }
 
-function drawPlan(){
+function drawGlobalPlan(){
 
-planDiv.innerHTML=""
+plan.innerHTML=""
 
 modules.forEach(m=>{
+
+if(!m.validated) return
 
 let c=calc(m)
 
 let grid=document.createElement("div")
 grid.className="grid"
-grid.style.gridTemplateColumns=`repeat(${c.cols},40px)`
+grid.style.gridTemplateColumns=`repeat(${c.L},30px)`
 
-for(let y=0;y<c.rows;y++){
-for(let x=0;x<c.cols;x++){
-
+for(let i=0;i<c.L*c.P;i++){
 let cell=document.createElement("div")
 cell.className="cell"
 
-if(m.R){
-cell.classList.add("riser")
-}
+if(m.R) cell.classList.add("riser")
 
-cell.innerText=m.H||""
+cell.innerText=m.H
 
 grid.appendChild(cell)
 }
-}
 
-planDiv.appendChild(grid)
+plan.appendChild(grid)
+
 })
 }
 
@@ -350,18 +288,13 @@ render()
 document.addEventListener("input",save)
 
 document.addEventListener("DOMContentLoaded",()=>{
-
 modulesDiv=document.getElementById("modules")
-planDiv=document.getElementById("plan")
-totalDiv=document.getElementById("total")
-artisteInput=document.getElementById("artiste")
-dateInput=document.getElementById("date")
-headerArtist=document.getElementById("headerArtist")
-headerDate=document.getElementById("headerDate")
-modeSelect=document.getElementById("mode")
-
+plan=document.getElementById("plan")
+total=document.getElementById("total")
+artiste=document.getElementById("artiste")
+date=document.getElementById("date")
+title=document.getElementById("title")
 load()
-
 })
 
 </script>
