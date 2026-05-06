@@ -14,17 +14,18 @@
 <style>
 
 :root{
---bg:#dfe4ea;
+--bg:#dfe5ec;
 --card:#f8fafc;
 --text:#1f2937;
 --border:#c7d0db;
 --accent:#5b4bdb;
---accent2:#7c6cff;
+--accent2:#7b6cff;
 --green:#2ca36b;
 --orange:#ff8b3d;
 --danger:#d64545;
 --module:#d7deea;
---shadow:0 4px 14px rgba(0,0,0,0.08);
+--moduleRiser:#bcc9e4;
+--shadow:0 4px 18px rgba(0,0,0,0.08);
 }
 
 .dark{
@@ -32,8 +33,9 @@
 --card:#1e293b;
 --text:#f1f5f9;
 --border:#334155;
---module:#475569;
---shadow:0 4px 18px rgba(0,0,0,0.35);
+--module:#64748b;
+--moduleRiser:#7c8fb3;
+--shadow:0 4px 20px rgba(0,0,0,0.35);
 }
 
 *{
@@ -49,28 +51,24 @@ color:var(--text);
 transition:0.2s;
 }
 
-.dark body{
-background:#0f172a;
-}
-
 .mainTitle{
 text-align:center;
-margin-bottom:12px;
-padding:10px;
+margin-bottom:14px;
+padding:14px;
 background:var(--card);
 border:2px solid var(--border);
-border-radius:16px;
+border-radius:18px;
 box-shadow:var(--shadow);
 }
 
 .mainTitle h1{
 margin:0;
-font-size:26px;
+font-size:28px;
 letter-spacing:1px;
 }
 
 .mainTitle p{
-margin:4px 0 0;
+margin:6px 0 0;
 font-size:14px;
 opacity:0.8;
 }
@@ -78,7 +76,7 @@ opacity:0.8;
 .card{
 background:var(--card);
 border:2px solid var(--border);
-border-radius:16px;
+border-radius:18px;
 padding:14px;
 margin-bottom:14px;
 box-shadow:var(--shadow);
@@ -95,8 +93,8 @@ flex:1;
 padding:10px;
 border-radius:10px;
 border:2px solid var(--border);
-background:white;
 font-size:14px;
+background:white;
 }
 
 .dark .topInputs input{
@@ -112,6 +110,8 @@ font-weight:bold;
 cursor:pointer;
 transition:0.15s;
 color:white;
+width:100%;
+margin-top:8px;
 }
 
 button:hover{
@@ -137,12 +137,13 @@ background:var(--danger);
 .smallBtn{
 width:48px;
 padding:10px;
+margin-top:0;
 }
 
 .module{
 border:2px solid var(--border);
-border-radius:14px;
-padding:12px;
+border-radius:16px;
+padding:14px;
 margin-bottom:14px;
 background:rgba(255,255,255,0.45);
 backdrop-filter:blur(4px);
@@ -154,13 +155,14 @@ background:rgba(255,255,255,0.03);
 
 .module h3{
 margin-top:0;
+margin-bottom:10px;
 }
 
 .inputs{
 display:grid;
 grid-template-columns:1fr 1fr 1fr;
 gap:8px;
-margin-bottom:8px;
+margin-bottom:10px;
 }
 
 .inputs input,
@@ -181,25 +183,28 @@ color:white;
 .grid{
 display:grid;
 gap:5px;
-margin-top:10px;
+margin-top:12px;
 }
 
 .cell{
 width:68px;
 height:34px;
-background:linear-gradient(135deg,#aab7c8,#c7d2df);
+background:linear-gradient(135deg,var(--module),#cfd8e3);
 border-radius:6px;
 display:flex;
 align-items:center;
 justify-content:center;
-font-weight:bold;
 position:relative;
+font-weight:bold;
 color:#1e293b;
 border:1px solid rgba(255,255,255,0.6);
 }
 
+.cell.riser{
+background:linear-gradient(135deg,var(--moduleRiser),#d4def2);
+}
+
 .dark .cell{
-background:linear-gradient(135deg,#64748b,#475569);
 color:white;
 }
 
@@ -216,24 +221,24 @@ color:#ff3b3b;
 display:flex;
 flex-wrap:wrap;
 gap:22px;
-margin-top:14px;
+margin-top:16px;
 }
 
 .planBlock{
 padding:10px;
-border-radius:12px;
+border-radius:14px;
 border:2px dashed var(--border);
 background:rgba(255,255,255,0.2);
 }
 
 .commande{
-margin-top:16px;
-padding-top:12px;
+margin-top:18px;
+padding-top:14px;
 border-top:2px solid var(--border);
 }
 
 .commande h2{
-margin:0 0 10px;
+margin:0 0 12px;
 }
 
 .big{
@@ -249,7 +254,7 @@ margin-top:6px;
 }
 
 .legend{
-margin-top:10px;
+margin-top:12px;
 font-size:12px;
 opacity:0.7;
 }
@@ -257,12 +262,12 @@ opacity:0.7;
 .exportBtns{
 display:grid;
 gap:10px;
-margin-top:14px;
+margin-top:16px;
 }
 
 .moduleResume{
 margin-top:10px;
-padding:10px;
+padding:12px;
 border-radius:12px;
 background:rgba(0,0,0,0.04);
 font-size:14px;
@@ -271,6 +276,26 @@ line-height:1.6;
 
 .dark .moduleResume{
 background:rgba(255,255,255,0.05);
+}
+
+.exportHeader{
+text-align:center;
+margin-bottom:18px;
+}
+
+.exportHeader h1{
+margin:0;
+font-size:28px;
+}
+
+.exportHeader p{
+margin:6px 0 0;
+font-size:14px;
+opacity:0.8;
+}
+
+.exportHeader h2{
+margin-top:16px;
 }
 
 </style>
@@ -303,9 +328,13 @@ background:rgba(255,255,255,0.05);
 
 <div class="card">
 
-<button class="primary" onclick="addModule()">+ Ajouter module</button>
+<button class="primary" onclick="addModule()">
++ Ajouter module
+</button>
 
-<button class="red" onclick="resetAll()">Reset général</button>
+<button class="red" onclick="resetAll()">
+Reset général
+</button>
 
 </div>
 
@@ -313,9 +342,17 @@ background:rgba(255,255,255,0.05);
 
 <div class="card" id="exportArea">
 
-<h2 style="margin-top:0;">
+<div class="exportHeader">
+
+<h1 id="exportArtist">—</h1>
+
+<p id="exportDate"></p>
+
+<h2>
 PLAN D’IMPLANTATION PRATICABLES
 </h2>
+
+</div>
 
 <div id="resumeModules" class="moduleResume"></div>
 
@@ -360,32 +397,46 @@ let modules=[]
 let headerLocked=false
 
 function save(){
+
 localStorage.setItem("modules",JSON.stringify(modules))
 localStorage.setItem("artist",artistInput.value)
 localStorage.setItem("date",dateInput.value)
-localStorage.setItem("theme",document.body.classList.contains("dark"))
+localStorage.setItem(
+"theme",
+document.body.classList.contains("dark")
+)
+
 }
 
 function load(){
 
-modules=JSON.parse(localStorage.getItem("modules")||"[]")
+modules=JSON.parse(
+localStorage.getItem("modules") || "[]"
+)
 
-artistInput.value=localStorage.getItem("artist")||""
-dateInput.value=localStorage.getItem("date")||""
+artistInput.value=
+localStorage.getItem("artist") || ""
+
+dateInput.value=
+localStorage.getItem("date") || ""
 
 if(localStorage.getItem("theme")==="true"){
 document.body.classList.add("dark")
 }
 
 render()
+
 }
 
 function toggleTheme(){
+
 document.body.classList.toggle("dark")
+
 localStorage.setItem(
 "theme",
 document.body.classList.contains("dark")
 )
+
 }
 
 function lockHeader(){
@@ -411,6 +462,7 @@ validated:false
 })
 
 render()
+
 }
 
 function calc(m){
@@ -419,9 +471,13 @@ let cols=Math.ceil((m.A||0)/2)
 let rows=Math.ceil((m.B||0))
 
 let praticables=cols*rows
-let risers=m.R?praticables:0
 
-let sucres=((cols-1)*rows + cols*(rows-1))*2
+let risers=m.R
+? praticables
+: 0
+
+let sucres=
+((cols-1)*rows + cols*(rows-1))*2
 
 return{
 cols,
@@ -430,23 +486,38 @@ praticables,
 risers,
 sucres
 }
+
 }
 
 function validateModule(i){
+
 modules[i].validated=true
+
 save()
+
 render()
+
 }
 
 function removeModule(i){
+
 modules.splice(i,1)
+
 save()
+
 render()
+
 }
 
 function update(i,key,val){
-modules[i][key]=key==="R"?val:val
+
+modules[i][key]=
+key==="R"
+? val
+: val
+
 render()
+
 }
 
 function render(){
@@ -456,7 +527,17 @@ artistInput.value || "—"
 
 dateDisplay.innerText=
 dateInput.value
-? new Date(dateInput.value).toLocaleDateString("fr-FR")
+? new Date(dateInput.value)
+.toLocaleDateString("fr-FR")
+: ""
+
+exportArtist.innerText=
+artistInput.value || "—"
+
+exportDate.innerText=
+dateInput.value
+? new Date(dateInput.value)
+.toLocaleDateString("fr-FR")
 : ""
 
 let html=""
@@ -478,6 +559,7 @@ validatedModules.push(m)
 totalP+=c.praticables
 totalR+=c.risers
 totalS+=c.sucres
+
 }
 
 html+=`
@@ -524,9 +606,13 @@ Sur Riser
 
 </select>
 
-<button class="primary"
-onclick="validateModule(${i})">
+<button
+class="primary"
+onclick="validateModule(${i})"
+>
+
 VALIDER MODULE
+
 </button>
 
 </div>
@@ -540,25 +626,34 @@ ${m.R?"• R":""}
 </h3>
 
 <div>
+
 Praticables : ${c.praticables}<br>
+
 Risers : ${c.risers}<br>
+
 <span class="small">
 Sucres : ${c.sucres}
 </span>
+
 </div>
 
 <div
 class="grid"
-style="grid-template-columns:repeat(${c.cols},68px)"
+style="
+grid-template-columns:
+repeat(${c.cols},68px)
+"
 >
 
 ${Array(c.cols*c.rows).fill(0).map(()=>`
 
-<div class="cell">
+<div class="cell ${m.R?"riser":""}">
 
 ${m.H}
 
-${m.R?'<div class="r">R</div>':""}
+${m.R
+?'<div class="r">R</div>'
+:""}
 
 </div>
 
@@ -618,6 +713,7 @@ Sucres : ${totalS}
 drawGlobalPlan()
 
 save()
+
 }
 
 function drawGlobalPlan(){
@@ -631,9 +727,11 @@ if(!m.validated) return
 let c=calc(m)
 
 let block=document.createElement("div")
+
 block.className="planBlock"
 
 let grid=document.createElement("div")
+
 grid.className="grid"
 
 grid.style.gridTemplateColumns=
@@ -642,20 +740,26 @@ grid.style.gridTemplateColumns=
 for(let i=0;i<c.cols*c.rows;i++){
 
 let cell=document.createElement("div")
-cell.className="cell"
+
+cell.className=
+`cell ${m.R?"riser":""}`
 
 cell.innerText=m.H
 
 if(m.R){
 
 let r=document.createElement("div")
+
 r.className="r"
+
 r.innerText="R"
 
 cell.appendChild(r)
+
 }
 
 grid.appendChild(cell)
+
 }
 
 block.appendChild(grid)
@@ -663,6 +767,7 @@ block.appendChild(grid)
 planGlobal.appendChild(block)
 
 })
+
 }
 
 function exportPNG(){
@@ -673,18 +778,21 @@ document.getElementById("exportArea")
 
 let link=document.createElement("a")
 
-link.download="plan-praticables.png"
+link.download=
+"plan-praticables.png"
 
 link.href=canvas.toDataURL()
 
 link.click()
 
 })
+
 }
 
 function copyCommande(){
 
 let txt=`
+
 ${artistInput.value}
 
 ${dateDisplay.innerText}
@@ -696,6 +804,7 @@ ${resumeModules.innerText}
 ${totaux.innerText}
 
 ${sucres.innerText}
+
 `
 
 navigator.clipboard.writeText(txt)
@@ -707,6 +816,7 @@ alert("Commande copiée")
 function shareCommande(){
 
 let txt=`
+
 ${artistInput.value}
 
 ${dateDisplay.innerText}
@@ -714,6 +824,7 @@ ${dateDisplay.innerText}
 PLAN D’IMPLANTATION PRATICABLES
 
 ${totaux.innerText}
+
 `
 
 if(navigator.share){
@@ -728,36 +839,67 @@ text:txt
 alert("Partage non supporté")
 
 }
+
 }
 
 function resetAll(){
 
+let confirmReset=confirm(
+"Êtes-vous sûr de vouloir tout effacer ?"
+)
+
+if(!confirmReset) return
+
 modules=[]
 
-localStorage.clear()
+artistInput.value=""
+dateInput.value=""
+
+localStorage.removeItem("modules")
+localStorage.removeItem("artist")
+localStorage.removeItem("date")
+localStorage.removeItem("theme")
 
 render()
+
 }
 
-document.addEventListener("DOMContentLoaded",()=>{
+document.addEventListener(
+"DOMContentLoaded",
+()=>{
 
-modulesDiv=document.getElementById("modules")
+modulesDiv=
+document.getElementById("modules")
 
-artistInput=document.getElementById("artistInput")
+artistInput=
+document.getElementById("artistInput")
 
-dateInput=document.getElementById("dateInput")
+dateInput=
+document.getElementById("dateInput")
 
-artistDisplay=document.getElementById("artistDisplay")
+artistDisplay=
+document.getElementById("artistDisplay")
 
-dateDisplay=document.getElementById("dateDisplay")
+dateDisplay=
+document.getElementById("dateDisplay")
 
-resumeModules=document.getElementById("resumeModules")
+exportArtist=
+document.getElementById("exportArtist")
 
-totaux=document.getElementById("totaux")
+exportDate=
+document.getElementById("exportDate")
 
-sucres=document.getElementById("sucres")
+resumeModules=
+document.getElementById("resumeModules")
 
-planGlobal=document.getElementById("planGlobal")
+totaux=
+document.getElementById("totaux")
+
+sucres=
+document.getElementById("sucres")
+
+planGlobal=
+document.getElementById("planGlobal")
 
 load()
 
