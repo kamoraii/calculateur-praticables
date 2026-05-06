@@ -23,8 +23,8 @@
 --green:#2ca36b;
 --orange:#ff8b3d;
 --danger:#d64545;
---module:#d7deea;
---moduleRiser:#bcc9e4;
+--module:#cbd5e1;
+--moduleRiser:#a5b4d4;
 --shadow:0 4px 18px rgba(0,0,0,0.08);
 }
 
@@ -34,7 +34,7 @@
 --text:#f1f5f9;
 --border:#334155;
 --module:#64748b;
---moduleRiser:#7c8fb3;
+--moduleRiser:#8193b6;
 --shadow:0 4px 20px rgba(0,0,0,0.35);
 }
 
@@ -44,10 +44,12 @@ box-sizing:border-box;
 
 body{
 margin:0;
-padding:12px;
-font-family:-apple-system,Arial;
+padding:10px;
+font-family:-apple-system,Arial,sans-serif;
 background:linear-gradient(to bottom,var(--bg),#cfd7e2);
 color:var(--text);
+overflow-x:hidden;
+max-width:100vw;
 transition:0.2s;
 }
 
@@ -80,26 +82,37 @@ border-radius:18px;
 padding:14px;
 margin-bottom:14px;
 box-shadow:var(--shadow);
+overflow:hidden;
 }
 
 .topInputs{
 display:flex;
-gap:8px;
-align-items:center;
+flex-direction:column;
+gap:10px;
 }
 
 .topInputs input{
-flex:1;
-padding:10px;
-border-radius:10px;
+width:100%;
+padding:12px;
+border-radius:12px;
 border:2px solid var(--border);
-font-size:14px;
+font-size:16px;
 background:white;
 }
 
 .dark .topInputs input{
 background:#0f172a;
 color:white;
+}
+
+.topBtns{
+display:flex;
+gap:8px;
+width:100%;
+}
+
+.topBtns button{
+flex:1;
 }
 
 button{
@@ -134,10 +147,8 @@ background:var(--orange);
 background:var(--danger);
 }
 
-.smallBtn{
-width:48px;
-padding:10px;
-margin-top:0;
+.darkBtn{
+background:#111827;
 }
 
 .module{
@@ -160,17 +171,17 @@ margin-bottom:10px;
 
 .inputs{
 display:grid;
-grid-template-columns:1fr 1fr 1fr;
+grid-template-columns:1fr;
 gap:8px;
 margin-bottom:10px;
 }
 
 .inputs input,
 .inputs select{
-padding:10px;
-border-radius:10px;
+padding:12px;
+border-radius:12px;
 border:2px solid var(--border);
-font-size:14px;
+font-size:15px;
 background:white;
 }
 
@@ -182,26 +193,27 @@ color:white;
 
 .grid{
 display:grid;
-gap:5px;
+gap:4px;
 margin-top:12px;
 }
 
 .cell{
-width:68px;
-height:34px;
-background:linear-gradient(135deg,var(--module),#cfd8e3);
+width:58px;
+height:28px;
+background:linear-gradient(135deg,var(--module),#dbe4ef);
 border-radius:6px;
 display:flex;
 align-items:center;
 justify-content:center;
 position:relative;
 font-weight:bold;
+font-size:13px;
 color:#1e293b;
 border:1px solid rgba(255,255,255,0.6);
 }
 
 .cell.riser{
-background:linear-gradient(135deg,var(--moduleRiser),#d4def2);
+background:linear-gradient(135deg,var(--moduleRiser),#c7d5ee);
 }
 
 .dark .cell{
@@ -220,15 +232,59 @@ color:#ff3b3b;
 .planGlobal{
 display:flex;
 flex-wrap:wrap;
-gap:22px;
+gap:12px;
+justify-content:flex-start;
+align-items:flex-start;
 margin-top:16px;
 }
 
 .planBlock{
-padding:10px;
+padding:8px;
 border-radius:14px;
 border:2px dashed var(--border);
-background:rgba(255,255,255,0.2);
+background:rgba(255,255,255,0.18);
+transform-origin:top left;
+}
+
+.exportHeader{
+text-align:center;
+margin-bottom:18px;
+}
+
+.exportHeader h2{
+margin:0 0 10px;
+font-size:20px;
+letter-spacing:1px;
+}
+
+.exportHeader h1{
+margin:0;
+font-size:28px;
+}
+
+.exportHeader p{
+margin-top:6px;
+font-size:14px;
+opacity:0.75;
+}
+
+.moduleResume{
+margin-top:10px;
+padding:12px;
+border-radius:12px;
+background:rgba(0,0,0,0.04);
+font-size:14px;
+line-height:1.7;
+}
+
+.dark .moduleResume{
+background:rgba(255,255,255,0.05);
+}
+
+.legend{
+margin-top:12px;
+font-size:12px;
+opacity:0.75;
 }
 
 .commande{
@@ -242,21 +298,15 @@ margin:0 0 12px;
 }
 
 .big{
-font-size:22px;
+font-size:20px;
 font-weight:bold;
-line-height:1.5;
+line-height:1.6;
 }
 
 .small{
 font-size:12px;
-opacity:0.5;
+opacity:0.45;
 margin-top:6px;
-}
-
-.legend{
-margin-top:12px;
-font-size:12px;
-opacity:0.7;
 }
 
 .exportBtns{
@@ -265,37 +315,26 @@ gap:10px;
 margin-top:16px;
 }
 
-.moduleResume{
-margin-top:10px;
-padding:12px;
-border-radius:12px;
-background:rgba(0,0,0,0.04);
-font-size:14px;
-line-height:1.6;
+@media(max-width:500px){
+
+.cell{
+width:44px;
+height:22px;
+font-size:10px;
 }
 
-.dark .moduleResume{
-background:rgba(255,255,255,0.05);
+.planGlobal{
+gap:8px;
 }
 
-.exportHeader{
-text-align:center;
-margin-bottom:18px;
+.big{
+font-size:17px;
 }
 
 .exportHeader h1{
-margin:0;
-font-size:28px;
+font-size:24px;
 }
 
-.exportHeader p{
-margin:6px 0 0;
-font-size:14px;
-opacity:0.8;
-}
-
-.exportHeader h2{
-margin-top:16px;
 }
 
 </style>
@@ -304,8 +343,11 @@ margin-top:16px;
 <body>
 
 <div class="mainTitle">
+
 <h1 id="artistDisplay">—</h1>
+
 <p id="dateDisplay"></p>
+
 </div>
 
 <div class="card">
@@ -316,11 +358,15 @@ margin-top:16px;
 
 <input id="dateInput" type="date">
 
-<button class="primary smallBtn" onclick="lockHeader()">✔</button>
+<div class="topBtns">
 
-<button class="orange smallBtn" onclick="unlockHeader()">✏️</button>
+<button class="primary" onclick="lockHeader()">✔</button>
 
-<button class="smallBtn" style="background:#111827;" onclick="toggleTheme()">🌙</button>
+<button class="orange" onclick="unlockHeader()">✏️</button>
+
+<button class="darkBtn" onclick="toggleTheme()">🌙</button>
+
+</div>
 
 </div>
 
@@ -344,13 +390,13 @@ Reset général
 
 <div class="exportHeader">
 
-<h1 id="exportArtist">—</h1>
-
-<p id="exportDate"></p>
-
 <h2>
 PLAN D’IMPLANTATION PRATICABLES
 </h2>
+
+<h1 id="exportArtist">—</h1>
+
+<p id="exportDate"></p>
 
 </div>
 
@@ -394,13 +440,24 @@ Envoyer la commande
 <script>
 
 let modules=[]
-let headerLocked=false
 
 function save(){
 
-localStorage.setItem("modules",JSON.stringify(modules))
-localStorage.setItem("artist",artistInput.value)
-localStorage.setItem("date",dateInput.value)
+localStorage.setItem(
+"modules",
+JSON.stringify(modules)
+)
+
+localStorage.setItem(
+"artist",
+artistInput.value
+)
+
+localStorage.setItem(
+"date",
+dateInput.value
+)
+
 localStorage.setItem(
 "theme",
 document.body.classList.contains("dark")
@@ -432,21 +489,21 @@ function toggleTheme(){
 
 document.body.classList.toggle("dark")
 
-localStorage.setItem(
-"theme",
-document.body.classList.contains("dark")
-)
+save()
 
 }
 
 function lockHeader(){
-headerLocked=true
-render()
+
+artistInput.blur()
+dateInput.blur()
+
 }
 
 function unlockHeader(){
-headerLocked=false
-render()
+
+artistInput.focus()
+
 }
 
 function addModule(){
@@ -468,6 +525,7 @@ render()
 function calc(m){
 
 let cols=Math.ceil((m.A||0)/2)
+
 let rows=Math.ceil((m.B||0))
 
 let praticables=cols*rows
@@ -590,10 +648,6 @@ value="${m.H}"
 onchange="update(${i},'H',this.value)"
 >
 
-</div>
-
-<div class="inputs">
-
 <select onchange="update(${i},'R',this.value==='true')">
 
 <option value="false" ${!m.R?"selected":""}>
@@ -606,6 +660,34 @@ Sur Riser
 
 </select>
 
+</div>
+
+<div
+class="grid"
+style="
+grid-template-columns:
+repeat(${Math.max(c.cols,1)},58px)
+"
+>
+
+${Array(
+Math.max(c.cols*c.rows,1)
+).fill(0).map(()=>`
+
+<div class="cell ${m.R?"riser":""}">
+
+${m.H || ""}
+
+${m.R
+?'<div class="r">R</div>'
+:""}
+
+</div>
+
+`).join("")}
+
+</div>
+
 <button
 class="primary"
 onclick="validateModule(${i})"
@@ -614,8 +696,6 @@ onclick="validateModule(${i})"
 VALIDER MODULE
 
 </button>
-
-</div>
 
 ` : `
 
@@ -641,7 +721,7 @@ Sucres : ${c.sucres}
 class="grid"
 style="
 grid-template-columns:
-repeat(${c.cols},68px)
+repeat(${c.cols},58px)
 "
 >
 
@@ -664,7 +744,6 @@ ${m.R
 <button
 class="red"
 onclick="removeModule(${i})"
-style="margin-top:12px;"
 >
 
 Supprimer
@@ -674,10 +753,12 @@ Supprimer
 `}
 
 </div>
+
 `
+
 })
 
-modulesDiv.innerHTML=html
+modules.innerHTML=html
 
 resumeModules.innerHTML=`
 
@@ -726,16 +807,26 @@ if(!m.validated) return
 
 let c=calc(m)
 
+let totalCells=c.cols*c.rows
+
+let scale=1
+
+if(totalCells>12) scale=0.9
+if(totalCells>20) scale=0.8
+if(totalCells>30) scale=0.7
+
 let block=document.createElement("div")
 
 block.className="planBlock"
+
+block.style.transform=`scale(${scale})`
 
 let grid=document.createElement("div")
 
 grid.className="grid"
 
 grid.style.gridTemplateColumns=
-`repeat(${c.cols},68px)`
+`repeat(${c.cols},58px)`
 
 for(let i=0;i<c.cols*c.rows;i++){
 
@@ -855,10 +946,7 @@ modules=[]
 artistInput.value=""
 dateInput.value=""
 
-localStorage.removeItem("modules")
-localStorage.removeItem("artist")
-localStorage.removeItem("date")
-localStorage.removeItem("theme")
+localStorage.clear()
 
 render()
 
@@ -868,37 +956,37 @@ document.addEventListener(
 "DOMContentLoaded",
 ()=>{
 
-modulesDiv=
+window.modulesContainer=
 document.getElementById("modules")
 
-artistInput=
+window.artistInput=
 document.getElementById("artistInput")
 
-dateInput=
+window.dateInput=
 document.getElementById("dateInput")
 
-artistDisplay=
+window.artistDisplay=
 document.getElementById("artistDisplay")
 
-dateDisplay=
+window.dateDisplay=
 document.getElementById("dateDisplay")
 
-exportArtist=
+window.exportArtist=
 document.getElementById("exportArtist")
 
-exportDate=
+window.exportDate=
 document.getElementById("exportDate")
 
-resumeModules=
+window.resumeModules=
 document.getElementById("resumeModules")
 
-totaux=
+window.totaux=
 document.getElementById("totaux")
 
-sucres=
+window.sucres=
 document.getElementById("sucres")
 
-planGlobal=
+window.planGlobal=
 document.getElementById("planGlobal")
 
 load()
