@@ -6,137 +6,204 @@
 
 <title>Praticables</title>
 
+<link rel="icon" href="flavicon.jpg">
+<link rel="apple-touch-icon" href="flavicon.jpg">
+
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <style>
+
+:root{
+--bg:#e9ecf2;
+--card:#ffffff;
+--text:#111;
+--border:#cfd3da;
+--accent:#6a5acd;
+--green:#2e9d57;
+--orange:#ff8c00;
+}
+
+.dark{
+--bg:#121212;
+--card:#1e1e1e;
+--text:#fff;
+--border:#333;
+}
+
 body{
-font-family:-apple-system,Arial;
 margin:0;
+font-family:-apple-system,Arial;
+background:var(--bg);
+color:var(--text);
 padding:12px;
-background:#f5f5f5;
 }
 
-.header{
+h1{
 text-align:center;
+margin:6px 0;
+}
+
+.headerInputs{
+display:flex;
+gap:6px;
 margin-bottom:10px;
 }
 
-.card{
-background:white;
-padding:12px;
-border-radius:12px;
-margin-bottom:10px;
-}
-
-input,select{
-width:100%;
-padding:8px;
-margin-top:6px;
-margin-bottom:10px;
-border-radius:8px;
-border:1px solid #ccc;
+.headerInputs input{
+flex:1;
+padding:6px;
+font-size:12px;
 }
 
 button{
-width:100%;
 padding:10px;
 border:none;
 border-radius:10px;
-margin-top:6px;
-background:#6a5acd;
 color:white;
+width:100%;
+margin-top:6px;
 }
 
-.reset{
-background:#d84343;
+.card{
+background:var(--card);
+border:2px solid var(--border);
+border-radius:12px;
+padding:12px;
+margin-bottom:12px;
 }
 
 .module{
-border:2px solid #ddd;
-padding:10px;
+border:2px solid var(--border);
 border-radius:10px;
-margin-bottom:12px;
+padding:10px;
+margin-bottom:10px;
 }
 
 .grid{
 display:grid;
-gap:2px;
+gap:4px;
 margin-top:6px;
 }
 
 .cell{
-width:30px;
-height:18px;
+width:60px;
+height:30px;
+background:#e0e3ea;
 display:flex;
 align-items:center;
 justify-content:center;
-font-size:10px;
-background:#ddd;
+position:relative;
+font-weight:bold;
 }
 
-.riser{
-background:#6a5acd;
-color:white;
+.r{
+position:absolute;
+bottom:1px;
+left:2px;
+font-size:8px;
+color:red;
+font-weight:bold;
 }
 
 .globalPlan{
 display:flex;
 flex-wrap:wrap;
 gap:20px;
+justify-content:flex-start;
 }
 
 .commande{
 font-size:22px;
 font-weight:bold;
+margin-top:10px;
 }
 
 .sucres{
 font-size:12px;
 opacity:0.5;
 }
+
+.legend{
+font-size:12px;
+opacity:0.7;
+margin-top:8px;
+}
+
+.exportBtn{background:var(--green);}
+.copyBtn{background:var(--accent);}
+.shareBtn{background:var(--orange);}
+
 </style>
 </head>
 
 <body>
 
-<div class="header">
-<h2 id="title">—</h2>
-</div>
+<h1 id="title">—</h1>
 
-<div class="card">
+<div class="headerInputs">
 <input id="artiste" placeholder="Artiste">
 <input id="date" type="date">
+<button onclick="lockTitle()">✔</button>
+<button onclick="unlockTitle()">✏️</button>
+<button onclick="toggleTheme()">🌙</button>
 </div>
 
 <div class="card">
-<button onclick="addModule()">+ Ajouter module</button>
-<button class="reset" onclick="resetAll()">Reset</button>
+<button onclick="addModule()" id="addBtn">+ Ajouter module</button>
+<button onclick="resetAll()" style="background:#d84343;">Reset</button>
 </div>
 
 <div id="modules"></div>
 
-<div class="card">
-<h3>COMMANDE</h3>
-<div id="total"></div>
+<div class="card" id="exportArea">
+
+<div id="plan" class="globalPlan"></div>
+
+<div class="legend">
+R → Riser • chiffre = hauteur (cm)
 </div>
 
-<div class="card">
-<h3>Plan global</h3>
-<div id="plan" class="globalPlan"></div>
+<div id="total"></div>
+
+<button class="exportBtn" onclick="exportPNG()">Exporter la commande</button>
+<button class="copyBtn" onclick="copyText()">Copier la commande</button>
+<button class="shareBtn" onclick="share()">Envoyer la commande</button>
+
 </div>
 
 <script>
 
 let modules=[]
+let locked=false
 
 function save(){
 localStorage.setItem("modules",JSON.stringify(modules))
 localStorage.setItem("artiste",artiste.value)
 localStorage.setItem("date",date.value)
+localStorage.setItem("locked",locked)
+localStorage.setItem("theme",document.body.classList.contains("dark"))
 }
 
 function load(){
 modules=JSON.parse(localStorage.getItem("modules")||"[]")
 artiste.value=localStorage.getItem("artiste")||""
 date.value=localStorage.getItem("date")||""
+locked=localStorage.getItem("locked")==="true"
+
+if(localStorage.getItem("theme")==="true"){
+document.body.classList.add("dark")
+}
+
+render()
+}
+
+function lockTitle(){locked=true;render();save()}
+function unlockTitle(){locked=false;render();save()}
+function toggleTheme(){document.body.classList.toggle("dark");save()}
+
+function addModule(){
+if(modules.some(m=>!m.validated)) return
+modules.unshift({L:"",P:"",H:"",R:false,validated:false})
 render()
 }
 
@@ -149,40 +216,18 @@ let sucres=((L-1)*P + L*(P-1))*2
 return {L,P,praticables,risers,sucres}
 }
 
-function addModule(){
-modules.push({
-L:"",
-P:"",
-H:"",
-R:false,
-validated:false
-})
-render()
-}
-
-function validateModule(i){
-modules[i].validated=true
-save()
-render()
-}
-
-function update(i,key,val){
-modules[i][key]=(key==="R")?val:val
-render()
-}
-
-function removeModule(i){
-modules.splice(i,1)
-save()
-render()
-}
+function validateModule(i){modules[i].validated=true;save();render()}
+function update(i,key,val){modules[i][key]=(key==="R")?val:val;render()}
+function removeModule(i){modules.splice(i,1);save();render()}
 
 function render(){
 
-title.innerText = artiste.value || "—"
+title.innerText = artiste.value
+? `${artiste.value}\n${date.value?new Date(date.value).toLocaleDateString("fr-FR"):""}`
+: "—"
 
 let html=""
-let totalP=0,totalR=0,totalS=0
+let totalP=0,totalR=0,totalS=0,count=0
 
 modules.forEach((m,i)=>{
 
@@ -192,6 +237,7 @@ if(m.validated){
 totalP+=c.praticables
 totalR+=c.risers
 totalS+=c.sucres
+count++
 }
 
 html+=`
@@ -199,84 +245,112 @@ html+=`
 
 ${!m.validated ? `
 
-<b>Nouveau module</b>
-
-<input placeholder="Dimension A (m)" value="${m.L}" onchange="update(${i},'L',this.value)">
-<input placeholder="Dimension B (m)" value="${m.P}" onchange="update(${i},'P',this.value)">
-<input placeholder="Hauteur (cm)" value="${m.H}" onchange="update(${i},'H',this.value)">
+<input placeholder="Dimension A" value="${m.L}" onchange="update(${i},'L',this.value)">
+<input placeholder="Dimension B" value="${m.P}" onchange="update(${i},'P',this.value)">
+<input placeholder="Hauteur" value="${m.H}" onchange="update(${i},'H',this.value)">
 
 <select onchange="update(${i},'R',this.value==='true')">
-<option value="false">Sans Riser</option>
-<option value="true">Sur Riser</option>
+<option value="false" ${!m.R?"selected":""}>Sans Riser</option>
+<option value="true" ${m.R?"selected":""}>Sur Riser</option>
 </select>
 
-<button onclick="validateModule(${i})">VALIDER MODULE</button>
+<button onclick="validateModule(${i})">VALIDER</button>
 
 ` : `
 
-<b>${m.L} × ${m.P} à ${m.H} cm</b>
-
+<b>${m.L} × ${m.P} à ${m.H} cm</b><br>
 Praticables : ${c.praticables}<br>
 Risers : ${c.risers}<br>
 <span class="sucres">Sucres : ${c.sucres}</span>
 
-<div class="grid" style="grid-template-columns:repeat(${c.L},30px)">
+<div class="grid" style="grid-template-columns:repeat(${c.L},60px)">
 ${Array(c.L*c.P).fill(0).map(()=>`
-<div class="cell ${m.R?"riser":""}">${m.H}</div>
-`).join("")}
+<div class="cell">
+${m.H}
+${m.R?'<div class="r">R</div>':""}
+</div>`).join("")}
 </div>
 
 <button onclick="removeModule(${i})">Supprimer</button>
 
 `}
 
-</div>
-`
+</div>`
 })
 
 modulesDiv.innerHTML=html
 
 total.innerHTML=`
 <div class="commande">
+Modules : ${count}<br>
 Praticables : ${totalP}<br>
 Risers : ${totalR}
 </div>
-<div class="sucres">
-Sucres : ${totalS}
-</div>
+<div class="sucres">Sucres : ${totalS}</div>
 `
 
-drawGlobalPlan()
+drawPlan()
+save()
 }
 
-function drawGlobalPlan(){
+function drawPlan(){
 
 plan.innerHTML=""
 
 modules.forEach(m=>{
-
 if(!m.validated) return
-
 let c=calc(m)
 
+let wrap=document.createElement("div")
 let grid=document.createElement("div")
 grid.className="grid"
-grid.style.gridTemplateColumns=`repeat(${c.L},30px)`
+grid.style.gridTemplateColumns=`repeat(${c.L},60px)`
 
 for(let i=0;i<c.L*c.P;i++){
 let cell=document.createElement("div")
 cell.className="cell"
-
-if(m.R) cell.classList.add("riser")
-
 cell.innerText=m.H
+
+if(m.R){
+let r=document.createElement("div")
+r.className="r"
+r.innerText="R"
+cell.appendChild(r)
+}
 
 grid.appendChild(cell)
 }
 
-plan.appendChild(grid)
-
+wrap.appendChild(grid)
+plan.appendChild(wrap)
 })
+}
+
+function exportPNG(){
+html2canvas(document.getElementById("exportArea")).then(canvas=>{
+let link=document.createElement("a")
+link.download="plan.png"
+link.href=canvas.toDataURL()
+link.click()
+})
+}
+
+function copyText(){
+let text=`${artiste.value}
+${date.value}
+
+Modules : ${modules.filter(m=>m.validated).length}
+Praticables : ${total.innerText}`
+navigator.clipboard.writeText(text)
+}
+
+function share(){
+let text=document.getElementById("total").innerText
+if(navigator.share){
+navigator.share({title:"Commande",text:text})
+}else{
+alert("Partage non supporté")
+}
 }
 
 function resetAll(){
@@ -284,8 +358,6 @@ modules=[]
 localStorage.clear()
 render()
 }
-
-document.addEventListener("input",save)
 
 document.addEventListener("DOMContentLoaded",()=>{
 modulesDiv=document.getElementById("modules")
