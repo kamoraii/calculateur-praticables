@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Praticables</title>
+<title>Plan d’implantation praticables</title>
 
 <link rel="icon" href="flavicon.jpg">
 <link rel="apple-touch-icon" href="flavicon.jpg">
@@ -14,181 +14,364 @@
 <style>
 
 :root{
---bg:#e9ecf2;
---card:#ffffff;
---text:#111;
---border:#cfd3da;
---accent:#6a5acd;
---green:#2e9d57;
---orange:#ff8c00;
+--bg:#dfe4ea;
+--card:#f8fafc;
+--text:#1f2937;
+--border:#c7d0db;
+--accent:#5b4bdb;
+--accent2:#7c6cff;
+--green:#2ca36b;
+--orange:#ff8b3d;
+--danger:#d64545;
+--module:#d7deea;
+--shadow:0 4px 14px rgba(0,0,0,0.08);
 }
 
 .dark{
---bg:#121212;
---card:#1e1e1e;
---text:#fff;
---border:#333;
+--bg:#0f172a;
+--card:#1e293b;
+--text:#f1f5f9;
+--border:#334155;
+--module:#475569;
+--shadow:0 4px 18px rgba(0,0,0,0.35);
+}
+
+*{
+box-sizing:border-box;
 }
 
 body{
 margin:0;
-font-family:-apple-system,Arial;
-background:var(--bg);
-color:var(--text);
 padding:12px;
+font-family:-apple-system,Arial;
+background:linear-gradient(to bottom,var(--bg),#cfd7e2);
+color:var(--text);
+transition:0.2s;
 }
 
-h1{
+.dark body{
+background:#0f172a;
+}
+
+.mainTitle{
 text-align:center;
-margin:6px 0;
-}
-
-.headerInputs{
-display:flex;
-gap:6px;
-margin-bottom:10px;
-}
-
-.headerInputs input{
-flex:1;
-padding:6px;
-font-size:12px;
-}
-
-button{
+margin-bottom:12px;
 padding:10px;
-border:none;
-border-radius:10px;
-color:white;
-width:100%;
-margin-top:6px;
+background:var(--card);
+border:2px solid var(--border);
+border-radius:16px;
+box-shadow:var(--shadow);
+}
+
+.mainTitle h1{
+margin:0;
+font-size:26px;
+letter-spacing:1px;
+}
+
+.mainTitle p{
+margin:4px 0 0;
+font-size:14px;
+opacity:0.8;
 }
 
 .card{
 background:var(--card);
 border:2px solid var(--border);
+border-radius:16px;
+padding:14px;
+margin-bottom:14px;
+box-shadow:var(--shadow);
+}
+
+.topInputs{
+display:flex;
+gap:8px;
+align-items:center;
+}
+
+.topInputs input{
+flex:1;
+padding:10px;
+border-radius:10px;
+border:2px solid var(--border);
+background:white;
+font-size:14px;
+}
+
+.dark .topInputs input{
+background:#0f172a;
+color:white;
+}
+
+button{
+border:none;
 border-radius:12px;
 padding:12px;
-margin-bottom:12px;
+font-weight:bold;
+cursor:pointer;
+transition:0.15s;
+color:white;
+}
+
+button:hover{
+transform:scale(1.01);
+}
+
+.primary{
+background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+.green{
+background:var(--green);
+}
+
+.orange{
+background:var(--orange);
+}
+
+.red{
+background:var(--danger);
+}
+
+.smallBtn{
+width:48px;
+padding:10px;
 }
 
 .module{
 border:2px solid var(--border);
-border-radius:10px;
+border-radius:14px;
+padding:12px;
+margin-bottom:14px;
+background:rgba(255,255,255,0.45);
+backdrop-filter:blur(4px);
+}
+
+.dark .module{
+background:rgba(255,255,255,0.03);
+}
+
+.module h3{
+margin-top:0;
+}
+
+.inputs{
+display:grid;
+grid-template-columns:1fr 1fr 1fr;
+gap:8px;
+margin-bottom:8px;
+}
+
+.inputs input,
+.inputs select{
 padding:10px;
-margin-bottom:10px;
+border-radius:10px;
+border:2px solid var(--border);
+font-size:14px;
+background:white;
+}
+
+.dark .inputs input,
+.dark .inputs select{
+background:#0f172a;
+color:white;
 }
 
 .grid{
 display:grid;
-gap:4px;
-margin-top:6px;
+gap:5px;
+margin-top:10px;
 }
 
 .cell{
-width:60px;
-height:30px;
-background:#e0e3ea;
+width:68px;
+height:34px;
+background:linear-gradient(135deg,#aab7c8,#c7d2df);
+border-radius:6px;
 display:flex;
 align-items:center;
 justify-content:center;
-position:relative;
 font-weight:bold;
+position:relative;
+color:#1e293b;
+border:1px solid rgba(255,255,255,0.6);
+}
+
+.dark .cell{
+background:linear-gradient(135deg,#64748b,#475569);
+color:white;
 }
 
 .r{
 position:absolute;
+left:3px;
 bottom:1px;
-left:2px;
 font-size:8px;
-color:red;
 font-weight:bold;
+color:#ff3b3b;
 }
 
-.globalPlan{
+.planGlobal{
 display:flex;
 flex-wrap:wrap;
-gap:20px;
-justify-content:flex-start;
+gap:22px;
+margin-top:14px;
+}
+
+.planBlock{
+padding:10px;
+border-radius:12px;
+border:2px dashed var(--border);
+background:rgba(255,255,255,0.2);
 }
 
 .commande{
-font-size:22px;
-font-weight:bold;
-margin-top:10px;
+margin-top:16px;
+padding-top:12px;
+border-top:2px solid var(--border);
 }
 
-.sucres{
+.commande h2{
+margin:0 0 10px;
+}
+
+.big{
+font-size:22px;
+font-weight:bold;
+line-height:1.5;
+}
+
+.small{
 font-size:12px;
 opacity:0.5;
+margin-top:6px;
 }
 
 .legend{
+margin-top:10px;
 font-size:12px;
 opacity:0.7;
-margin-top:8px;
 }
 
-.exportBtn{background:var(--green);}
-.copyBtn{background:var(--accent);}
-.shareBtn{background:var(--orange);}
+.exportBtns{
+display:grid;
+gap:10px;
+margin-top:14px;
+}
+
+.moduleResume{
+margin-top:10px;
+padding:10px;
+border-radius:12px;
+background:rgba(0,0,0,0.04);
+font-size:14px;
+line-height:1.6;
+}
+
+.dark .moduleResume{
+background:rgba(255,255,255,0.05);
+}
 
 </style>
 </head>
 
 <body>
 
-<h1 id="title">—</h1>
-
-<div class="headerInputs">
-<input id="artiste" placeholder="Artiste">
-<input id="date" type="date">
-<button onclick="lockTitle()">✔</button>
-<button onclick="unlockTitle()">✏️</button>
-<button onclick="toggleTheme()">🌙</button>
+<div class="mainTitle">
+<h1 id="artistDisplay">—</h1>
+<p id="dateDisplay"></p>
 </div>
 
 <div class="card">
-<button onclick="addModule()" id="addBtn">+ Ajouter module</button>
-<button onclick="resetAll()" style="background:#d84343;">Reset</button>
+
+<div class="topInputs">
+
+<input id="artistInput" placeholder="Artiste">
+
+<input id="dateInput" type="date">
+
+<button class="primary smallBtn" onclick="lockHeader()">✔</button>
+
+<button class="orange smallBtn" onclick="unlockHeader()">✏️</button>
+
+<button class="smallBtn" style="background:#111827;" onclick="toggleTheme()">🌙</button>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<button class="primary" onclick="addModule()">+ Ajouter module</button>
+
+<button class="red" onclick="resetAll()">Reset général</button>
+
 </div>
 
 <div id="modules"></div>
 
 <div class="card" id="exportArea">
 
-<div id="plan" class="globalPlan"></div>
+<h2 style="margin-top:0;">
+PLAN D’IMPLANTATION PRATICABLES
+</h2>
+
+<div id="resumeModules" class="moduleResume"></div>
+
+<div id="planGlobal" class="planGlobal"></div>
 
 <div class="legend">
-R → Riser • chiffre = hauteur (cm)
+<span style="color:#ff3b3b;font-weight:bold;">R</span>
+→ Riser • Chiffre → Hauteur (cm)
 </div>
 
-<div id="total"></div>
+<div class="commande">
 
-<button class="exportBtn" onclick="exportPNG()">Exporter la commande</button>
-<button class="copyBtn" onclick="copyText()">Copier la commande</button>
-<button class="shareBtn" onclick="share()">Envoyer la commande</button>
+<h2>COMMANDE MATÉRIEL</h2>
+
+<div id="totaux" class="big"></div>
+
+<div id="sucres" class="small"></div>
+
+</div>
+
+<div class="exportBtns">
+
+<button class="green" onclick="exportPNG()">
+Exporter la commande
+</button>
+
+<button class="primary" onclick="copyCommande()">
+Copier la commande
+</button>
+
+<button class="orange" onclick="shareCommande()">
+Envoyer la commande
+</button>
+
+</div>
 
 </div>
 
 <script>
 
 let modules=[]
-let locked=false
+let headerLocked=false
 
 function save(){
 localStorage.setItem("modules",JSON.stringify(modules))
-localStorage.setItem("artiste",artiste.value)
-localStorage.setItem("date",date.value)
-localStorage.setItem("locked",locked)
+localStorage.setItem("artist",artistInput.value)
+localStorage.setItem("date",dateInput.value)
 localStorage.setItem("theme",document.body.classList.contains("dark"))
 }
 
 function load(){
+
 modules=JSON.parse(localStorage.getItem("modules")||"[]")
-artiste.value=localStorage.getItem("artiste")||""
-date.value=localStorage.getItem("date")||""
-locked=localStorage.getItem("locked")==="true"
+
+artistInput.value=localStorage.getItem("artist")||""
+dateInput.value=localStorage.getItem("date")||""
 
 if(localStorage.getItem("theme")==="true"){
 document.body.classList.add("dark")
@@ -197,176 +380,387 @@ document.body.classList.add("dark")
 render()
 }
 
-function lockTitle(){locked=true;render();save()}
-function unlockTitle(){locked=false;render();save()}
-function toggleTheme(){document.body.classList.toggle("dark");save()}
+function toggleTheme(){
+document.body.classList.toggle("dark")
+localStorage.setItem(
+"theme",
+document.body.classList.contains("dark")
+)
+}
+
+function lockHeader(){
+headerLocked=true
+render()
+}
+
+function unlockHeader(){
+headerLocked=false
+render()
+}
 
 function addModule(){
+
 if(modules.some(m=>!m.validated)) return
-modules.unshift({L:"",P:"",H:"",R:false,validated:false})
+
+modules.unshift({
+A:"",
+B:"",
+H:"",
+R:false,
+validated:false
+})
+
 render()
 }
 
 function calc(m){
-let L=Math.ceil((m.L||0)/2)
-let P=Math.ceil((m.P||0))
-let praticables=L*P
+
+let cols=Math.ceil((m.A||0)/2)
+let rows=Math.ceil((m.B||0))
+
+let praticables=cols*rows
 let risers=m.R?praticables:0
-let sucres=((L-1)*P + L*(P-1))*2
-return {L,P,praticables,risers,sucres}
+
+let sucres=((cols-1)*rows + cols*(rows-1))*2
+
+return{
+cols,
+rows,
+praticables,
+risers,
+sucres
+}
 }
 
-function validateModule(i){modules[i].validated=true;save();render()}
-function update(i,key,val){modules[i][key]=(key==="R")?val:val;render()}
-function removeModule(i){modules.splice(i,1);save();render()}
+function validateModule(i){
+modules[i].validated=true
+save()
+render()
+}
+
+function removeModule(i){
+modules.splice(i,1)
+save()
+render()
+}
+
+function update(i,key,val){
+modules[i][key]=key==="R"?val:val
+render()
+}
 
 function render(){
 
-title.innerText = artiste.value
-? `${artiste.value}\n${date.value?new Date(date.value).toLocaleDateString("fr-FR"):""}`
-: "—"
+artistDisplay.innerText=
+artistInput.value || "—"
+
+dateDisplay.innerText=
+dateInput.value
+? new Date(dateInput.value).toLocaleDateString("fr-FR")
+: ""
 
 let html=""
-let totalP=0,totalR=0,totalS=0,count=0
+
+let totalP=0
+let totalR=0
+let totalS=0
+
+let validatedModules=[]
 
 modules.forEach((m,i)=>{
 
 let c=calc(m)
 
 if(m.validated){
+
+validatedModules.push(m)
+
 totalP+=c.praticables
 totalR+=c.risers
 totalS+=c.sucres
-count++
 }
 
 html+=`
+
 <div class="module">
 
 ${!m.validated ? `
 
-<input placeholder="Dimension A" value="${m.L}" onchange="update(${i},'L',this.value)">
-<input placeholder="Dimension B" value="${m.P}" onchange="update(${i},'P',this.value)">
-<input placeholder="Hauteur" value="${m.H}" onchange="update(${i},'H',this.value)">
+<h3>Nouveau module</h3>
+
+<div class="inputs">
+
+<input
+placeholder="Dimension A"
+value="${m.A}"
+onchange="update(${i},'A',this.value)"
+>
+
+<input
+placeholder="Dimension B"
+value="${m.B}"
+onchange="update(${i},'B',this.value)"
+>
+
+<input
+placeholder="Hauteur"
+value="${m.H}"
+onchange="update(${i},'H',this.value)"
+>
+
+</div>
+
+<div class="inputs">
 
 <select onchange="update(${i},'R',this.value==='true')">
-<option value="false" ${!m.R?"selected":""}>Sans Riser</option>
-<option value="true" ${m.R?"selected":""}>Sur Riser</option>
+
+<option value="false" ${!m.R?"selected":""}>
+Sans Riser
+</option>
+
+<option value="true" ${m.R?"selected":""}>
+Sur Riser
+</option>
+
 </select>
 
-<button onclick="validateModule(${i})">VALIDER</button>
+<button class="primary"
+onclick="validateModule(${i})">
+VALIDER MODULE
+</button>
+
+</div>
 
 ` : `
 
-<b>${m.L} × ${m.P} à ${m.H} cm</b><br>
+<h3>
+${m.A} × ${m.B}
+à ${m.H} cm
+${m.R?"• R":""}
+</h3>
+
+<div>
 Praticables : ${c.praticables}<br>
 Risers : ${c.risers}<br>
-<span class="sucres">Sucres : ${c.sucres}</span>
-
-<div class="grid" style="grid-template-columns:repeat(${c.L},60px)">
-${Array(c.L*c.P).fill(0).map(()=>`
-<div class="cell">
-${m.H}
-${m.R?'<div class="r">R</div>':""}
-</div>`).join("")}
+<span class="small">
+Sucres : ${c.sucres}
+</span>
 </div>
 
-<button onclick="removeModule(${i})">Supprimer</button>
+<div
+class="grid"
+style="grid-template-columns:repeat(${c.cols},68px)"
+>
+
+${Array(c.cols*c.rows).fill(0).map(()=>`
+
+<div class="cell">
+
+${m.H}
+
+${m.R?'<div class="r">R</div>':""}
+
+</div>
+
+`).join("")}
+
+</div>
+
+<button
+class="red"
+onclick="removeModule(${i})"
+style="margin-top:12px;"
+>
+
+Supprimer
+
+</button>
 
 `}
 
-</div>`
+</div>
+`
 })
 
 modulesDiv.innerHTML=html
 
-total.innerHTML=`
-<div class="commande">
-Modules : ${count}<br>
-Praticables : ${totalP}<br>
-Risers : ${totalR}
-</div>
-<div class="sucres">Sucres : ${totalS}</div>
+resumeModules.innerHTML=`
+
+<b>
+${validatedModules.length}
+module${validatedModules.length>1?"s":""} :
+</b><br>
+
+${validatedModules.map(m=>`
+
+• ${m.A} × ${m.B}
+à ${m.H}
+${m.R?"R":""}
+
+`).join("<br>")}
+
 `
 
-drawPlan()
+totaux.innerHTML=`
+
+Modules : ${validatedModules.length}<br>
+
+Praticables : ${totalP}<br>
+
+Risers : ${totalR}
+
+`
+
+sucres.innerHTML=`
+Sucres : ${totalS}
+`
+
+drawGlobalPlan()
+
 save()
 }
 
-function drawPlan(){
+function drawGlobalPlan(){
 
-plan.innerHTML=""
+planGlobal.innerHTML=""
 
 modules.forEach(m=>{
+
 if(!m.validated) return
+
 let c=calc(m)
 
-let wrap=document.createElement("div")
+let block=document.createElement("div")
+block.className="planBlock"
+
 let grid=document.createElement("div")
 grid.className="grid"
-grid.style.gridTemplateColumns=`repeat(${c.L},60px)`
 
-for(let i=0;i<c.L*c.P;i++){
+grid.style.gridTemplateColumns=
+`repeat(${c.cols},68px)`
+
+for(let i=0;i<c.cols*c.rows;i++){
+
 let cell=document.createElement("div")
 cell.className="cell"
+
 cell.innerText=m.H
 
 if(m.R){
+
 let r=document.createElement("div")
 r.className="r"
 r.innerText="R"
+
 cell.appendChild(r)
 }
 
 grid.appendChild(cell)
 }
 
-wrap.appendChild(grid)
-plan.appendChild(wrap)
+block.appendChild(grid)
+
+planGlobal.appendChild(block)
+
 })
 }
 
 function exportPNG(){
-html2canvas(document.getElementById("exportArea")).then(canvas=>{
+
+html2canvas(
+document.getElementById("exportArea")
+).then(canvas=>{
+
 let link=document.createElement("a")
-link.download="plan.png"
+
+link.download="plan-praticables.png"
+
 link.href=canvas.toDataURL()
+
 link.click()
+
 })
 }
 
-function copyText(){
-let text=`${artiste.value}
-${date.value}
+function copyCommande(){
 
-Modules : ${modules.filter(m=>m.validated).length}
-Praticables : ${total.innerText}`
-navigator.clipboard.writeText(text)
+let txt=`
+${artistInput.value}
+
+${dateDisplay.innerText}
+
+PLAN D’IMPLANTATION PRATICABLES
+
+${resumeModules.innerText}
+
+${totaux.innerText}
+
+${sucres.innerText}
+`
+
+navigator.clipboard.writeText(txt)
+
+alert("Commande copiée")
+
 }
 
-function share(){
-let text=document.getElementById("total").innerText
+function shareCommande(){
+
+let txt=`
+${artistInput.value}
+
+${dateDisplay.innerText}
+
+PLAN D’IMPLANTATION PRATICABLES
+
+${totaux.innerText}
+`
+
 if(navigator.share){
-navigator.share({title:"Commande",text:text})
+
+navigator.share({
+title:"Plan praticables",
+text:txt
+})
+
 }else{
+
 alert("Partage non supporté")
+
 }
 }
 
 function resetAll(){
+
 modules=[]
+
 localStorage.clear()
+
 render()
 }
 
 document.addEventListener("DOMContentLoaded",()=>{
+
 modulesDiv=document.getElementById("modules")
-plan=document.getElementById("plan")
-total=document.getElementById("total")
-artiste=document.getElementById("artiste")
-date=document.getElementById("date")
-title=document.getElementById("title")
+
+artistInput=document.getElementById("artistInput")
+
+dateInput=document.getElementById("dateInput")
+
+artistDisplay=document.getElementById("artistDisplay")
+
+dateDisplay=document.getElementById("dateDisplay")
+
+resumeModules=document.getElementById("resumeModules")
+
+totaux=document.getElementById("totaux")
+
+sucres=document.getElementById("sucres")
+
+planGlobal=document.getElementById("planGlobal")
+
 load()
+
 })
 
 </script>
